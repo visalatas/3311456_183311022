@@ -1,5 +1,6 @@
 import 'package:edumate/helpers/base_helper.dart';
 import 'package:edumate/models/student.dart';
+import 'package:edumate/screens/student_add.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -93,8 +94,7 @@ class _MyAppState extends State<MyApp> {
                 ],
               ),
               onPressed: () {
-                var mesaj = "Eklendi!";
-                baseHelper.mesajGoster(context, mesaj);
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>StudentAdd()));
               },
             ),
           ),
