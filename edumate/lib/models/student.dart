@@ -1,11 +1,11 @@
-import 'dart:ffi';
+//import 'dart:ffi';
 
 class Student {
-  int? id;
-  String? firstName;
-  String? lastName;
-  int? grade;
-  String? status;
+  int id=0;
+  String firstName="";
+  String lastName="";
+  int grade=0;
+  String status="";
 
   Student.WithId(int id, String firstName, String lastName, int grade) {
     this.id=id;
@@ -20,13 +20,18 @@ class Student {
     this.grade = grade;
     
   }
+   
+
+  Student.withoutInfo(){
+    
+  }
   
   String get getStatus{
      
     String message = " ";
-    if (this.grade! >= 50) {
+    if (this.grade >= 50) {
       message = 'geçti';
-    } else if (this.grade! >= 40) {
+    } else if (this.grade >= 40) {
       message = 'büt';
     } else {
       message = 'kaldı';

@@ -3,25 +3,25 @@ import 'package:flutter/material.dart';
 
 import '../validation/student_validator.dart';
 
-class StudentAdd extends StatefulWidget {
-  List<Student> students= [];
-  StudentAdd(List<Student> students){
-    this.students=students;
+class StudentEdit extends StatefulWidget {
+  Student selectedStudent=Student("", "", 0);
+  StudentEdit(Student selectedStudent){
+    this.selectedStudent=selectedStudent;
 
   }
   @override
   State<StatefulWidget> createState() {
-    return _StudentAddState(students);
+    return _StudentAddState(selectedStudent);
   }
 }
 
 class _StudentAddState extends State with StudentValidationMixin {
-  List<Student> students=[];
-  var student = Student.withoutInfo();
+  Student selectedStudent=Student("","",0);
+  
   var formKey= GlobalKey<FormState>();
   
-  _StudentAddState(List<Student> students){
-    this.students=students;
+  _StudentAddState(Student selectedStudent){
+    this.selectedStudent=selectedStudent;
 
   }
 
@@ -31,7 +31,7 @@ class _StudentAddState extends State with StudentValidationMixin {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Öğrenci Ekle"),
+          title: Text("Güncelle"),
         ),
         body: Container(
           margin: EdgeInsets.all(20.0),
@@ -50,29 +50,32 @@ class _StudentAddState extends State with StudentValidationMixin {
 
   Widget buildFirstNameField() {
     return TextFormField(
+      initialValue: selectedStudent.firstName,
         decoration:
             InputDecoration(labelText: "Öğrenci adı", hintText: "Visal"),
         validator: validateFirstName,
         onSaved: (String? value) {
-          student.firstName = value??student.firstName;
+          selectedStudent.firstName = value??selectedStudent.firstName;
         });
   }
   Widget buildLastNameField() {
     return TextFormField(
+      initialValue: selectedStudent.lastName != null ? selectedStudent.lastName : null,
         decoration:
             InputDecoration(labelText: "Öğrenci soyadı", hintText: "Ataş"),
         validator: validateLastName,
         onSaved: (String? value) {
-          student.lastName = value??student.lastName;
+          selectedStudent.lastName = value??selectedStudent.lastName;
         });
   }
   Widget buildGradeField() {
     return TextFormField(
+      initialValue: selectedStudent.grade.toString(),
         decoration:
             InputDecoration(labelText: "Notu", hintText: "50"),
         validator: validateGrade,
         onSaved: (String? value) {
-          student.grade =int.parse(value!) ;
+          selectedStudent.grade =int.parse(value!) ;
         });
   }
   
@@ -80,12 +83,10 @@ class _StudentAddState extends State with StudentValidationMixin {
     return ElevatedButton(
       child: Text("Kaydet"),
       onPressed: (){
-        print(students);
         if(formKey.currentState!.validate()){
           formKey.currentState!.save();
-          students.add(student);
           saveStudent();
-          Navigator.pop(context,students);
+          Navigator.pop(context,selectedStudent);
         }
       },
       );
@@ -93,9 +94,9 @@ class _StudentAddState extends State with StudentValidationMixin {
   }
   
   void saveStudent() {
-    print(student.firstName);
-    print(student.lastName);
-    print(student.grade);
+    print(selectedStudent.firstName);
+    print(selectedStudent.lastName);
+    print(selectedStudent.grade);
 
   }
   

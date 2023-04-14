@@ -1,6 +1,7 @@
 import 'package:edumate/helpers/base_helper.dart';
 import 'package:edumate/models/student.dart';
 import 'package:edumate/screens/student_add.dart';
+import 'package:edumate/screens/student_edit.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -54,9 +55,7 @@ class _MyAppState extends State<MyApp> {
                 itemCount: students.length,
                 itemBuilder: (BuildContext, int index) {
                   return ListTile(
-                    leading: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            "https://cdn.pixabay.com/photo/2016/04/01/11/10/boy-1300226_960_720.png")),
+                    
                     title: Text(students[index].firstName.toString() +
                         " " +
                         students[index].lastName.toString()),
@@ -94,7 +93,13 @@ class _MyAppState extends State<MyApp> {
                 ],
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>StudentAdd()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>StudentAdd(students))).then((updatedStudents) {
+  if (updatedStudents != null) {
+    setState(() {
+      students = updatedStudents;
+    });
+  }
+});
               },
             ),
           ),
@@ -115,8 +120,13 @@ class _MyAppState extends State<MyApp> {
                 ],
               ),
               onPressed: () {
-                var mesaj = "Güncellendi!";
-                baseHelper.mesajGoster(context, mesaj);
+                 Navigator.push(context, MaterialPageRoute(builder: (context)=>StudentEdit(selectedStudent))).then((updatedStudent) {
+  if (updatedStudent != null) {
+    setState(() {
+      selectedStudent = updatedStudent;
+    });
+  }
+});
               },
             ),
           ),
