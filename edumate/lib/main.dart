@@ -1,15 +1,21 @@
- import 'package:edumate/screens/student_list.dart';
+import 'package:edumate/screens/login_page.dart';
+import 'package:edumate/screens/student_list.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-
-
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+  //bu yapı içinde normalde sadece runApp metodu vardır. Fakat firebase entegrasyonu için uygulama başlatılacağı sırada yukarıda yazılan iki yapı olmak zorundadır
+  //bu yapı firebase uygulama açılırken bağlantılarını başlatır. Firebase i açar.
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: StudentList(),
+      home: LoginPage(),
     );
   }
 }

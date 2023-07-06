@@ -6,7 +6,7 @@ import '../validation/student_validator.dart';
 
 class StudentAdd extends StatefulWidget {
   DbHelper db = DbHelper();
-  
+
   @override
   State<StatefulWidget> createState() {
     return StudentAddState();
@@ -17,7 +17,6 @@ class StudentAddState extends State<StudentAdd> with StudentValidationMixin {
   var txtName = TextEditingController();
   var txtLastName = TextEditingController();
   var txtGrade = TextEditingController();
- 
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -68,8 +67,6 @@ class StudentAddState extends State<StudentAdd> with StudentValidationMixin {
     );
   }
 
-  
-
   Widget buildSaveButton() {
     return ElevatedButton(
       child: const Text("Ekle"),
@@ -83,12 +80,17 @@ class StudentAddState extends State<StudentAdd> with StudentValidationMixin {
   }
 
   void addStudent() async {
+    await DbHelper().open();
     String firstName = txtName.text;
     String lastName = txtLastName.text;
     int grade = int.tryParse(txtGrade.text) ?? 0;
-    Student student = Student(firstName: firstName, lastName: lastName, grade: grade,);
+    Student student = Student(
+      firstName: firstName,
+      lastName: lastName,
+      grade: grade,
+    );
     await DbHelper().insertStudent(student);
-    
+
     // ignore: use_build_context_synchronously
     Navigator.pop(context, true);
   }

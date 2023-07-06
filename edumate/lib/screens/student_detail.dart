@@ -40,7 +40,7 @@ class _StudentDetailState extends State<StudentDetail>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Ürün detayı: ${student.firstName} ${student.lastName}"),
+        title: Text("Öğrenci: ${student.firstName} ${student.lastName}"),
         actions: <Widget>[
           PopupMenuButton<Options>(
             onSelected: selectProcess,
@@ -101,25 +101,25 @@ class _StudentDetailState extends State<StudentDetail>
     );
   }
 
- void selectProcess(Options options) async {
-  switch (options) {
-    case Options.delete:
-      await widget.db.deleteStudent(student.id!);
-      Navigator.pop(context, true);
-      break;
-    case Options.update:
-      int? id = student.id;
-      if (id != null) {
-        await widget.db.updateStudent(Student.withId(
-          id: id,
-          firstName: txtName.text,
-          lastName: txtLastName.text,
-          grade: int.tryParse(txtGrade.text) ?? 0,
-        ));
+  selectProcess(Options options) async {
+    switch (options) {
+      case Options.delete:
+        await widget.db.deleteStudent(student.id!);
         Navigator.pop(context, true);
-      }
-      break;
-    default:
+        break;
+      case Options.update:
+        int? id = student.id;
+        if (id != null) {
+          await widget.db.updateStudent(Student.withId(
+            id: id,
+            firstName: txtName.text,
+            lastName: txtLastName.text,
+            grade: int.tryParse(txtGrade.text) ?? 0,
+          ));
+          Navigator.pop(context, true);
+        }
+        break;
+      default:
+    }
   }
-}
 }

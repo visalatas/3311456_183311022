@@ -1,3 +1,4 @@
+import 'package:edumate/models/user.dart';
 import 'package:flutter/material.dart';
 import '../data/dbHelper.dart';
 import '../models/student.dart';
@@ -5,6 +6,9 @@ import '../screens/student_add.dart';
 import '../screens/student_detail.dart';
 
 class StudentList extends StatefulWidget {
+  final Kullanici kullanici;
+  const StudentList({Key? key, required this.kullanici}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _StudentListState();
@@ -24,17 +28,24 @@ class _StudentListState extends State<StudentList> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Öğrenci Listesi"),
-      ),
-      body: buildStudentList(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          goToStudentAdd(context);
-        },
-        child: Icon(Icons.add),
-        tooltip: "Yeni Öğrenci Ekle",
+    return WillPopScope(
+      onWillPop: () async {
+        // Geri düğmesine basıldığında yapılacak işlemleri burada tanımlanabilir.
+        // önceki sayfaya dönülmemesi için bu false değeri olmalıdır. Homepage den geriye gidilemeyecek. Sadece çıkış düğmesine basılınca dönülecek.
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("Öğrenci Listesi"),
+        ),
+        body: buildStudentList(),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            goToStudentAdd(context);
+          },
+          child: Icon(Icons.add),
+          tooltip: "Yeni Öğrenci Ekle",
+        ),
       ),
     );
   }
@@ -47,38 +58,64 @@ class _StudentListState extends State<StudentList> {
           color: Colors.cyan,
           elevation: 0.2,
           child: ListTile(
-            leading: CircleAvatar(backgroundColor: Colors.black12),
-            title: Text(students[position].firstName),
-            subtitle: Text(students[position].status ?? ""),
-            onTap: () {},
+            leading: CircleAvatar(
+              backgroundColor: Colors.black12,
+              child: Text(students[position].grade.toString()),
+            ),
+            title: Text(students[position].firstName +
+                " " +
+                students[position].lastName),
+            trailing: IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () {
+                setState(() {
+                  db.deleteStudent(students[position].id!);
+                  getStudents();
+                });
+              },
+            ),
+            subtitle: Text(students[position].getStatus),
+            onTap: () {
+              goToStudentDetails(students[position]);
+            },
           ),
         );
       },
     );
   }
 
-  void goToStudentAdd(BuildContext context) async {
+  goToStudentDetails(Student student) async {
+    bool? result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => StudentDetail(student),
+      ),
+    );
+    if (result != null && result) {
+      getStudents();
+    }
+  }
+
+  goToStudentAdd(BuildContext context) async {
     bool? result = await Navigator.push(
       context,
       MaterialPageRoute(builder: ((context) => StudentAdd())),
     );
-    if (result != null) {
-      if (result) {
-        getStudents();
-      }
+    if (result != null && result) {
+      getStudents();
     }
   }
 
-  void getStudents() async {
-    List<Student> data = await DbHelper().getStudents();
+  getStudents() async {
+    await db.open();
+    List<Student> data = await db.getStudents();
+
     setState(() {
       students = data;
       studentCount = data.length;
     });
   }
 }
-
-
 
 
 
