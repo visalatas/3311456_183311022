@@ -1,13 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edumate/data/firebase.dart';
 import 'package:edumate/screens/student_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-
 import '../models/user.dart';
 import '../utils/constants.dart';
 
@@ -19,30 +15,30 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  //gerekli modülleri değişkenlere atadım.
-  //Burada işlemleri için de firebaseAuth'a ihtiyaç vardır
-  //bu ifadeler kaydol dugmesinde kullanılacaktır.
+  
   final FirebaseAuth _firebaseauth = FirebaseAuth.instance;
 
-  //bu değişkenler  textformfield kutularından gelen değerleri almak ve kullanmak için alındı
+  
   late String ad, soyad, email, sifre;
-  //form widgetı ile formun mevcut durumunu kontrol etmek ve verileri kaydetmek için bir key oluşturmak lazım bu atama bunun içindir
+   
   final formKey = GlobalKey<FormState>();
 
-  //yukleniyor animasyonu için aç kapa değişkenidir. True olunca ekranın ortasında yükleme animasyonu oluşturmak için if kontrolünde kullanılacaktır.
+  
   bool _yukleniyor = false;
-  //bu değişken textformfield için şifrenin görünür ya da gizli olması durumlarını denetlemek için kullanılacak.
+  
   bool _sifreGizli = true;
 
-  //Bu ifadeler validator için yani hata kontrol yeri için birbiriyle aynı mı değil mi onu kontrol etmek için oluşturuldu
-  TextEditingController _sifreController = TextEditingController();
-  TextEditingController _sifreTekrarController = TextEditingController();
+ 
+  final TextEditingController _sifreController = TextEditingController();
+  final TextEditingController _sifreTekrarController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    // ignore: unused_local_variable
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
+      
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,7 +79,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   left: 8,
                   child: IconButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.arrow_back,
                         size: 32,
                         color: Colors.white,
@@ -120,7 +116,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         Flexible(
                           child: adTextField(),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 12,
                         ),
                         Flexible(
@@ -138,7 +134,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 width: double.infinity,
                 height: 56,
                 child: CupertinoButton(
-                  color: Color.fromRGBO(52, 137, 246, 1),
+                  color: const Color.fromRGBO(52, 137, 246, 1),
                   borderRadius: BorderRadius.circular(100),
                   onPressed: kaydolDugmesi,
                   pressedOpacity: 0.5,
@@ -184,6 +180,7 @@ class _SignUpPageState extends State<SignUpPage> {
           borderRadius: BorderRadius.circular(100),
         ),
       ),
+      // ignore: body_might_complete_normally_nullable
       validator: (girilenDeger) {
         if (girilenDeger!.isEmpty) {
           return "Şifre bölümü boş bırakılamaz!";
@@ -193,7 +190,7 @@ class _SignUpPageState extends State<SignUpPage> {
           return "Şifreler uyuşmuyor! Kontrol ediniz.";
         }
       },
-      //burada onsaved metoduna gerek yok çünkü sadece şifre tekrarı yapılıyor.
+      
     );
   }
 
@@ -220,7 +217,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     _sifreGizli = !_sifreGizli;
                   });
                 },
-                child: Icon(Icons.visibility_off_rounded))
+                child: const Icon(Icons.visibility_off_rounded))
             : InkWell(
                 borderRadius: BorderRadius.circular(200),
                 onTap: () {
@@ -228,7 +225,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     _sifreGizli = !_sifreGizli;
                   });
                 },
-                child: Icon(Icons.visibility_rounded)),
+                child: const Icon(Icons.visibility_rounded)),
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(
             color: Colors.grey,
@@ -240,6 +237,7 @@ class _SignUpPageState extends State<SignUpPage> {
           borderRadius: BorderRadius.circular(100),
         ),
       ),
+      // ignore: body_might_complete_normally_nullable
       validator: (girilenDeger) {
         if (girilenDeger!.isEmpty) {
           return "Şifre bölümü boş bırakılamaz!";
@@ -283,6 +281,7 @@ class _SignUpPageState extends State<SignUpPage> {
         } else if (!girilenDeger.contains('@')) {
           return "Mail formatını kullanmalısınız!";
         }
+        return null;
       },
       onSaved: (girilenDeger) => email = girilenDeger!,
     );
@@ -311,7 +310,7 @@ class _SignUpPageState extends State<SignUpPage> {
       inputFormatters: [
         TextInputFormatter.withFunction((oldValue, newValue) {
           if (newValue.text.isNotEmpty) {
-            // İlk harfi büyük harfe dönüştür
+            
             return TextEditingValue(
               text: newValue.text.substring(0, 1).toUpperCase() +
                   newValue.text.substring(1),
@@ -328,6 +327,7 @@ class _SignUpPageState extends State<SignUpPage> {
         } else if (_containsNumbersOrSpecialCharacters(girilenDeger)) {
           return "Soyad sadece harflerden oluşmalıdır!";
         }
+        return null;
       },
       onSaved: (girilenDeger) => soyad = girilenDeger!,
     );
@@ -356,7 +356,7 @@ class _SignUpPageState extends State<SignUpPage> {
       inputFormatters: [
         TextInputFormatter.withFunction((oldValue, newValue) {
           if (newValue.text.isNotEmpty) {
-            // İlk harfi büyük harfe dönüştür
+            
             return TextEditingValue(
               text: newValue.text.substring(0, 1).toUpperCase() +
                   newValue.text.substring(1),
@@ -373,21 +373,22 @@ class _SignUpPageState extends State<SignUpPage> {
         } else if (_containsNumbersOrSpecialCharacters(girilenDeger)) {
           return "Ad sadece harflerden oluşmalıdır!";
         }
+        return null;
       },
       onSaved: (girilenDeger) => ad = girilenDeger!,
     );
   }
 
-  //Bu fonksiyon ad ve soyad için özel karakterlerin olmamasını denetlemek için kullanılacak.
+  
   bool _containsNumbersOrSpecialCharacters(String value) {
     final regex = RegExp(r'[0-9!"\$%&/()=}+{^#*@]');
     return regex.hasMatch(value);
   }
-  //bu metot uzun sürebilecek giriş veya kaydolma işlemleri gibi yerlerde giriş ya da kaydol butonuna basıldığında kullanıcıya bilgi vermek amaçlı ekranın ortasında yükleniyor animasyonu oluşturuyor.
+ 
 
   _yukleniyorAnimasyonu() {
     if (_yukleniyor) {
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(),
       );
     } else {
@@ -397,8 +398,7 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
-//burada yapılan işlemler loginPage'in giriş yap fonksiyonlarıyla aynı olduğundan ek bir açıklama olabilecek yerler açıklandı sadece.
-//Detaylı ayrıntıyı bahsettiğim yerde bulabilirsiniz.
+
 
   void kaydolDugmesi() async {
     if (formKey.currentState!.validate()) {
@@ -409,12 +409,11 @@ class _SignUpPageState extends State<SignUpPage> {
       });
 
       try {
-        // bu metot aldığı maili ve şifreyi firebase Authentication bölümüne kaydeder.
+        
         final result = await _firebaseauth.createUserWithEmailAndPassword(
             email: email, password: sifre);
 
-        //burada firestore database de kullanıcı kaydı yapılıyor.
-        //lib/services/firebase.dart yolunda bulunan FirestoreServisi sınıfı sayesinde firebasefirestore da kullanıcı oluşturuluıyor.
+        
         await FirestoreService().createUser(
             id: result.user!.uid,
             ad: ad,
@@ -422,14 +421,10 @@ class _SignUpPageState extends State<SignUpPage> {
             email: email,
             sifre: sifre);
 
-        //Ayrıca Flutter içerisinden de bu kullanıcıyı oluşturmak için
-        //lib/models/user.dart dosyasında Kullanici sınıfından bir kullanıcı oluşturuldu.
+       
         Kullanici kullanici = Kullanici(email, result.user!.uid, ad, soyad);
-        //İşlemler tamamlandığında HomePage e gidecektir.
-
-        //HomePage Kullanici tipinde bir kullanıcı almalı
-        //Yukarıda oluşturulan kullanici değerini bu sayfaya giderken gönderiyoruz.
-        //Böylece anasayfada kullanıcının adına ve soyadına erişim sağlanabilecektir.
+        
+        // ignore: use_build_context_synchronously
         Navigator.of(context).pushReplacement(MaterialPageRoute(
           builder: (context) => StudentList(
             kullanici: kullanici,
@@ -437,10 +432,10 @@ class _SignUpPageState extends State<SignUpPage> {
         ));
         formKey.currentState!.reset();
       } on FirebaseAuthException catch (hata) {
-        //Bu kısımda hatalar bahsettiğim uygulamanın çökme durumunma getirebilecek hataları ekrana yazdırıyoruz.
+       
         uyariGoster(hataKodu: hata.code.toString());
 
-        // burada false yaparak hata olduğunda animasyonu ortadan kaldırıyoruz.
+        
         setState(() {
           _yukleniyor = false;
         });

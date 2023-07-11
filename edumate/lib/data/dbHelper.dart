@@ -20,7 +20,7 @@ class DbHelper {
   }
 
   Future<int> insertStudent(Student student) async {
-    final dbH = await db;
+    final dbH = db;
     if (dbH != null) {
       return await dbH.insert(
         'students',
@@ -45,7 +45,7 @@ class DbHelper {
   }
 
   Future<List<Student>> getStudents() async {
-    Database? dbH = await DbHelper.db;
+    Database? dbH = DbHelper.db;
     var result = await dbH?.query("students");
     return List.generate(result?.length ?? 0, (i) {
       return Student.fromMap(result?[i]);

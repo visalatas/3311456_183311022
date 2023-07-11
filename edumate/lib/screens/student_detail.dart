@@ -12,6 +12,7 @@ class StudentDetail extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
+    // ignore: no_logic_in_create_state
     return _StudentDetailState(student);
   }
 }
@@ -105,6 +106,7 @@ class _StudentDetailState extends State<StudentDetail>
     switch (options) {
       case Options.delete:
         await widget.db.deleteStudent(student.id!);
+        // ignore: use_build_context_synchronously
         Navigator.pop(context, true);
         break;
       case Options.update:
@@ -116,6 +118,7 @@ class _StudentDetailState extends State<StudentDetail>
             lastName: txtLastName.text,
             grade: int.tryParse(txtGrade.text) ?? 0,
           ));
+          // ignore: use_build_context_synchronously
           Navigator.pop(context, true);
         }
         break;

@@ -25,23 +25,21 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
+    // ignore: unused_local_variable
     double width = MediaQuery.of(context).size.width;
-    //Cihazın yükseklik ve genişlik değerleri değişkenlere atandı. Widget'ların farklı cihazlarda denk çözünürlüklere sahip olsun diye kullanılır.
+    
 
     return Scaffold(
-      //singlechildscrolview yapısı kullanıldığında Klavye çıkınca aşağıda kalan yapıları kaydırarak görebilmeye imkan verir.
+      
       body: SingleChildScrollView(
-        //ana yapı column içinde olacaktır. iki çocuğu var üst kısım ve gövde.
-        // Scaffold kısmında appBar ve body parametrelerine karşılık geliyor gibi düşünmek lazım
+        
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //burası ekranın üst kısmında bulunan arka plan resmi ve yazılar yer alıyor.
+            
             ustKisim(height),
 
-            //burada gövde ve yükleniyor animasyonu kısmı var. Yükleniyor animasyonu yukleniyor değerine göre ekranda belirlenecek.
-            //_yukleniyor=true olduğunda ekranın ortasında belirecek. Şimdilik false değerinde kaydol veya giriş yap düğmelerinden
-            //birine basıldığında true değeri alacak ve kullanıcıya işlemin gerçekleştiği uyarısını vermiş olacak.
+           
             Stack(
               children: [
                 govde(height),
@@ -91,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
   Padding govde(double height) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40.0),
-      // Gövde kısmı
+      
       child: Form(
         key: _formKey,
         child: SizedBox(
@@ -117,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                       width: double.infinity,
                       height: 56,
                       child: CupertinoButton(
-                        color: Color.fromRGBO(52, 137, 246, 1),
+                        color: const Color.fromRGBO(52, 137, 246, 1),
                         borderRadius: BorderRadius.circular(100),
                         onPressed: () => girisYap(),
                         pressedOpacity: 0.5,
@@ -130,21 +128,19 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    TextButton(
-                        onPressed: () {}, child: Text("Şifremi Unuttum")),
                   ],
                 ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Hesabın yok mu?"),
+                  const Text("Hesabın yok mu?"),
                   TextButton(
-                      onPressed: () => Navigator.of(context)
-                              .pushReplacement(MaterialPageRoute(
-                            builder: (context) => SignUpPage(),
+                      onPressed: () =>
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const SignUpPage(),
                           )),
-                      child: Text("Kaydol")),
+                      child: const Text("Kaydol")),
                 ],
               )
             ],
@@ -156,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
 
   TextFormField sifreTextField() {
     return TextFormField(
-      //bool tipinde_sifreGizli değişken oluşturdum bunu aşağıda suffixicon kısmında kontrol ediyorum.
+      
       obscureText: _sifreGizli,
       keyboardType: TextInputType.visiblePassword,
       decoration: InputDecoration(
@@ -177,7 +173,7 @@ class _LoginPageState extends State<LoginPage> {
                     _sifreGizli = !_sifreGizli;
                   });
                 },
-                child: Icon(Icons.visibility_off_rounded))
+                child: const Icon(Icons.visibility_off_rounded))
             : InkWell(
                 borderRadius: BorderRadius.circular(200),
                 onTap: () {
@@ -185,7 +181,7 @@ class _LoginPageState extends State<LoginPage> {
                     _sifreGizli = !_sifreGizli;
                   });
                 },
-                child: Icon(Icons.visibility_rounded)),
+                child: const Icon(Icons.visibility_rounded)),
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(
             color: Colors.grey,
@@ -197,6 +193,7 @@ class _LoginPageState extends State<LoginPage> {
           borderRadius: BorderRadius.circular(100),
         ),
       ),
+      // ignore: body_might_complete_normally_nullable
       validator: (girilenDeger) {
         if (girilenDeger!.isEmpty) {
           return "Şifre bölümü boş bırakılamaz!";
@@ -232,6 +229,7 @@ class _LoginPageState extends State<LoginPage> {
           borderRadius: BorderRadius.circular(100),
         ),
       ),
+      // ignore: body_might_complete_normally_nullable
       validator: (girilenDeger) {
         if (girilenDeger!.isEmpty) {
           return "Email bölümü boş bırakılamaz!";
@@ -244,41 +242,41 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   girisYap() async {
-    //burada giriş yap kontrolü sağlanıp sağlanmadığı kontrol edilecek. if kısmının koşulu validator kullanılan yerde sorun olmamasıdır.
+    
 
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!
-          .save(); // sorun yoksa mail ve şifre değerleri save metoduyla kaydoluyor. Girilen mail, email değişkenine ve şifre de sifre değişkenine atandı
-      //burada setstate ile widget ağacını tekrar döndürmek lazım ki yükleniyor widgetı ekranda gözüksün setstate kullanılmazsa ekrana gelmez.
+          .save(); 
       setState(() {
         _yukleniyor =
-            true; // yükleniyor true govde kısmının altında yükleniyorAnimasyonu devreye giriyor.
+            true; 
       });
-      //burada try catch kullanılmanın avantajı program hata alırsa çökmesin uygulama ekranında kullanıcıya bildirim versin.
+      
       try {
-        // burada firebaseauth un signwithemailandpassword metodu kullanılıyor. Burada adı üstünde olduğu gibi mail ve şifre gerekiyor save metoduyla aldığımız değerleri burada bu metoda gönderiyoruz.
+        
         final result = await FirebaseAuth.instance
             .signInWithEmailAndPassword(email: email, password: sifre);
 
         Kullanici kullanici =
             await FirestoreService().getUser(result.user!.uid);
 
-        //Giriş işlemi başarılı olduğunda anasayfaya gidecek
+        
+        // ignore: use_build_context_synchronously
         Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => StudentList(
                   kullanici: kullanici,
                 )));
         _formKey.currentState!.reset();
       } on FirebaseAuthException catch (hata) {
-        //Bu kısımda hatalar bahsettiğim uygulamanın çökme durumunma getirebilecek hataları ekrana yazdırıyoruz.
+        
         uyariGoster(hataKodu: hata.code.toString());
 
-        // burada false yaparak hata olduğunda animasyonu ortadan kaldırıyoruz.
+        
         setState(() {
           _yukleniyor = false;
         });
       }
-      // burada false değeri tekrardan fonksiyon sonunda verilmelidir. Eğer kullanıcı anasayfadan çıkış işlemi yapmak isterse _yukleniyor true olarak kalmamalı.
+      
       _yukleniyor = false;
     }
   }
@@ -287,9 +285,7 @@ class _LoginPageState extends State<LoginPage> {
     String? hataKodu,
   }) {
     late String hataMesaji;
-    // burada late kullanmılmazsa aşağıda text kısmında nonnullable hatası verecek. Late bir verinin şu an boş ama derlendiğinde o verinin geleceğini ifade ediyor.
-
-    //burada hata kodları signInWithEmailAndPassword metodunun varsayılan hata kodlarıdır. Bir if kontrolleriyle hangi hataya göre çevirisini ekrana hatamesaji na aktaracak
+   
     if (hataKodu == "user-not-found") {
       hataMesaji = "Mail Adresi Bulunamadı!";
     } else if (hataKodu == "invalid-email") {
@@ -301,15 +297,15 @@ class _LoginPageState extends State<LoginPage> {
     } else if (hataKodu == "wrong-password") {
       hataMesaji = "Şifre yanlış!";
     }
-    //burada hataMesaji ni ekranda snackbar olarak gösterecek
+    
     var snackBar = SnackBar(content: Text(hataMesaji));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-//bu metot uzun sürebilecek giriş veya kaydolma işlemleri gibi yerlerde giriş ya da kaydol butonuna basıldığında kullanıcıya bilgi vermek amaçlı ekranın ortasında yükleniyor animasyonu oluşturuyor.
+
   _yukleniyorAnimasyonu() {
     if (_yukleniyor) {
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(),
       );
     } else {

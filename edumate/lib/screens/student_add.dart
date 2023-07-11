@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import '../data/dbHelper.dart';
 import '../validation/student_validator.dart';
 
+// ignore: must_be_immutable
 class StudentAdd extends StatefulWidget {
   DbHelper db = DbHelper();
+
+  StudentAdd({super.key});
 
   @override
   State<StatefulWidget> createState() {
